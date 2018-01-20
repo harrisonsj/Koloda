@@ -336,7 +336,7 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
         let shouldSwipe = { direction in
             return self.delegate?.card(self, shouldSwipeIn: direction) ?? true
         }
-        if let dragDirection = dragDirection , shouldSwipe(dragDirection) && dragPercentage >= swipePercentageMargin && directions.contains(dragDirection) {
+        if let dragDirection = dragDirection , dragPercentage >= swipePercentageMargin && directions.contains(dragDirection) && shouldSwipe(dragDirection) {
             swipeAction(dragDirection)
         } else {
             resetViewPositionAndTransformations()
