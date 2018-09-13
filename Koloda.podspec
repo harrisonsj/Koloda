@@ -11,6 +11,7 @@ s.social_media_url = 'https://twitter.com/yalantis'
 
 s.platform     = :ios, '8.0'
 s.source_files = 'Pod/Classes/**/*'
+s.swift_version = '4.0'
 
 s.frameworks = 'UIKit'
 s.dependency 'pop', '~> 1.0'
