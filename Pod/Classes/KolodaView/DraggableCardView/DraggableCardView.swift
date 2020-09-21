@@ -19,7 +19,7 @@ public enum DragSpeed: TimeInterval {
 protocol DraggableCardDelegate: class {
     
     func card(_ card: DraggableCardView, wasDraggedWithFinishPercentage percentage: CGFloat, inDirection direction: SwipeResultDirection)
-    func card(_ card: DraggableCardView, wasSwipedIn direction: SwipeResultDirection)
+    func card(_ card: DraggableCardView, wasSwipedIn direction: SwipeResultDirection, shouldNotifyDelegate: Bool)
     func card(_ card: DraggableCardView, shouldSwipeIn direction: SwipeResultDirection) -> Bool
     func card(cardWasReset card: DraggableCardView)
     func card(cardWasTapped card: DraggableCardView)
@@ -377,7 +377,7 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
     private func swipeAction(_ direction: SwipeResultDirection) {
         overlayView?.overlayState = direction
         overlayView?.alpha = 1.0
-        delegate?.card(self, wasSwipedIn: direction)
+        delegate?.card(self, wasSwipedIn: direction, shouldNotifyDelegate: true)
         let translationAnimation = POPBasicAnimation(propertyNamed: kPOPLayerTranslationXY)
         translationAnimation?.duration = cardSwipeActionAnimationDuration
         translationAnimation?.fromValue = NSValue(cgPoint: POPLayerGetTranslationXY(layer))
@@ -435,8 +435,8 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
     
     func swipe(_ direction: SwipeResultDirection, completionHandler: @escaping () -> Void) {
         if !dragBegin {
-            /// Don't call delegate method if card swiped programatically, otherwise unable to differentiate between user swipe and programatic swipe.
-            //delegate?.card(self, wasSwipedIn: direction)
+            /// Don't notify delegate method if card swiped programatically, otherwise unable to differentiate between user swipe and programatic swipe.
+            delegate?.card(self, wasSwipedIn: direction, shouldNotifyDelegate: false)
             
             let swipePositionAnimation = POPBasicAnimation(propertyNamed: kPOPLayerTranslationXY)
             swipePositionAnimation?.fromValue = NSValue(cgPoint:POPLayerGetTranslationXY(layer))

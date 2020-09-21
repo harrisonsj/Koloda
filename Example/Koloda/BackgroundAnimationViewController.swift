@@ -76,6 +76,10 @@ extension BackgroundAnimationViewController: KolodaViewDelegate {
         animation?.springSpeed = frameAnimationSpringSpeed
         return animation
     }
+    
+    func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) {
+        NSLog("Did swipe card")
+    }
 }
 
 // MARK: KolodaViewDataSource

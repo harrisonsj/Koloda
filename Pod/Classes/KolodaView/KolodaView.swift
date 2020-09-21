@@ -339,8 +339,8 @@ open class KolodaView: UIView, DraggableCardDelegate {
         return delegate?.koloda(self, allowedDirectionsForIndex: index) ?? [.left, .right]
     }
     
-    func card(_ card: DraggableCardView, wasSwipedIn direction: SwipeResultDirection) {
-        swipedAction(direction)
+    func card(_ card: DraggableCardView, wasSwipedIn direction: SwipeResultDirection, shouldNotifyDelegate: Bool = true) {
+        swipedAction(direction, shouldNotifyDelegate: shouldNotifyDelegate)
     }
     
     func card(cardWasReset card: DraggableCardView) {
@@ -409,7 +409,7 @@ open class KolodaView: UIView, DraggableCardDelegate {
     }
     
     // MARK: Actions
-    private func swipedAction(_ direction: SwipeResultDirection) {
+    private func swipedAction(_ direction: SwipeResultDirection, shouldNotifyDelegate: Bool = true) {
         animationSemaphore.increment()
         visibleCards.removeFirst()
         
@@ -433,12 +433,16 @@ open class KolodaView: UIView, DraggableCardDelegate {
                 
                 _self.visibleCards.last?.isHidden = false
                 _self.animationSemaphore.decrement()
-                _self.delegate?.koloda(_self, didSwipeCardAt: swipedCardIndex, in: direction)
+                if shouldNotifyDelegate{
+                    _self.delegate?.koloda(_self, didSwipeCardAt: swipedCardIndex, in: direction)
+                }
                 _self.delegate?.koloda(_self, didShowCardAt: _self.currentCardIndex)
             }
         } else {
             animationSemaphore.decrement()
-            delegate?.koloda(self, didSwipeCardAt: swipedCardIndex, in: direction)
+            if shouldNotifyDelegate{
+                delegate?.koloda(self, didSwipeCardAt: swipedCardIndex, in: direction)
+            }
             delegate?.kolodaDidRunOutOfCards(self)
         }
     }
