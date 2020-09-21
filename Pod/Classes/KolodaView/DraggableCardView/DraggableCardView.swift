@@ -435,7 +435,8 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
     
     func swipe(_ direction: SwipeResultDirection, completionHandler: @escaping () -> Void) {
         if !dragBegin {
-            delegate?.card(self, wasSwipedIn: direction)
+            /// Don't call delegate method if card swiped programatically, otherwise unable to differentiate between user swipe and programatic swipe.
+            //delegate?.card(self, wasSwipedIn: direction)
             
             let swipePositionAnimation = POPBasicAnimation(propertyNamed: kPOPLayerTranslationXY)
             swipePositionAnimation?.fromValue = NSValue(cgPoint:POPLayerGetTranslationXY(layer))
